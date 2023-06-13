@@ -32,7 +32,9 @@
 
 ```md
 - src
-  - __tests__
+
+  - **tests**
+
     - e2e
       - auth
         - sign-in.e2e-spec.ts
@@ -67,8 +69,9 @@
         - find-transactions.spec.ts
         - update-transaction.spec.ts
         - delete-transaction.spec.ts
-  
+
   - domain
+
     - entities _(interfaces)_
       - user.ts
       - profile.ts
@@ -76,6 +79,7 @@
       - transaction.ts
 
   - application
+
     - repositories _(interfaces)_
       - auth.repository.ts
       - profile.repository.ts
@@ -102,6 +106,7 @@
       - messaging.adapter.ts
 
   - infra
+
     - database _(implementations)_
       - prisma
         - repositories
