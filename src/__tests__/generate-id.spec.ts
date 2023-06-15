@@ -1,4 +1,4 @@
-import { generateID } from "../../utils/generate-id";
+import { generateID } from "../utils/generate-id";
 
 describe("Generate ID Testing", () => {
   it("Should to generate an 8 characters length ID", () => {
