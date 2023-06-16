@@ -1,8 +1,11 @@
-import { Request, Response } from "express";
+import {
+  Controller,
+  ControllerResponse,
+} from "../../../../infra/http/adapters/controller-adapter";
 import { MeUseCase } from "./me.usecase";
 
-export class ChangePasswordController {
-  constructor(private useCase: MeUseCase) {}
-
-  async execute(req: Request, res: Response) {}
+export class MeControler extends Controller<MeUseCase> {
+  public execute(): Promise<ControllerResponse> {
+    return this.handleResult({});
+  }
 }

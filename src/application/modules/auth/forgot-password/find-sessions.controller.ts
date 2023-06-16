@@ -1,8 +1,11 @@
-import { Request, Response } from "express";
-import { FindSessionsUseCase } from "../find-sessions/find-sessions.usecase";
+import {
+  Controller,
+  ControllerResponse,
+} from "../../../../infra/http/adapters/controller-adapter";
+import { ForgotPasswordUseCase } from "./forgot-password.usecase";
 
-export class ChangePasswordController {
-  constructor(private useCase: FindSessionsUseCase) {}
-
-  async execute(req: Request, res: Response) {}
+export class ForgotPasswordControler extends Controller<ForgotPasswordUseCase> {
+  public execute(): Promise<ControllerResponse> {
+    return this.handleResult({});
+  }
 }

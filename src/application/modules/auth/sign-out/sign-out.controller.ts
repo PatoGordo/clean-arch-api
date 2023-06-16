@@ -1,8 +1,11 @@
-import { Request, Response } from "express";
+import {
+  Controller,
+  ControllerResponse,
+} from "../../../../infra/http/adapters/controller-adapter";
 import { SignOutUseCase } from "./sign-out.usecase";
 
-export class ChangePasswordController {
-  constructor(private useCase: SignOutUseCase) {}
-
-  async execute(req: Request, res: Response) {}
+export class SignOutControler extends Controller<SignOutUseCase> {
+  public execute(): Promise<ControllerResponse> {
+    return this.handleResult({});
+  }
 }

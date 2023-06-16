@@ -1,8 +1,11 @@
-import { Request, Response } from "express";
+import {
+  Controller,
+  ControllerResponse,
+} from "../../../../infra/http/adapters/controller-adapter";
 import { ResendEmailConfirmationUseCase } from "./resend-email-confirmation.usecase";
 
-export class ChangePasswordController {
-  constructor(private useCase: ResendEmailConfirmationUseCase) {}
-
-  async execute(req: Request, res: Response) {}
+export class ResendemailConfirmationControler extends Controller<ResendEmailConfirmationUseCase> {
+  public execute(): Promise<ControllerResponse> {
+    return this.handleResult({});
+  }
 }

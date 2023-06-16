@@ -2,9 +2,9 @@ import {
   Controller,
   ControllerResponse,
 } from "../../../../infra/http/adapters/controller-adapter";
-import { ChangePasswordUseCase } from "./change-password.usecase";
+import { FindProfileUseCase } from "./find-profile.usecase";
 
-export class ChangePasswordController extends Controller<ChangePasswordUseCase> {
+export class FindProfileControler extends Controller<FindProfileUseCase> {
   public execute(): Promise<ControllerResponse> {
     return this.handleResult({});
   }
