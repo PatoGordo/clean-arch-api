@@ -59,6 +59,17 @@ export abstract class Controller<T> {
 
     const statusCode = err.statusCode || 400;
 
+    if (error instanceof z.ZodError) {
+      const errors = this.formatZodErrors(error.flatten().fieldErrors);
+
+      return this.handleResult({
+        statusCode,
+        message: errors[0],
+        cause: err.cause,
+        code: err.code,
+      });
+    }
+
     if (err?.issues?.length) {
       const formatedErr = err.format() as {
         [_errors in string]: string[] | string;
@@ -90,6 +101,26 @@ export abstract class Controller<T> {
       cause: err.cause,
       code: err.code,
     });
+  };
+
+  protected formatZodErrors = (errors: any) => {
+    let formattedMessage = "";
+
+    for (const field in errors) {
+      (errors as unknown as any[])[field as any].forEach(
+        (error: any, index: number) => {
+          if (errors[field].length > 1) {
+            formattedMessage += `Erro no campo "${field}" no ${
+              index + 1
+            }º item: ${error}\n`;
+          } else {
+            formattedMessage += `Erro no campo "${field}": ${error}\n`;
+          }
+        },
+      );
+    }
+
+    return formattedMessage;
   };
 
   protected getBody = async () => {
