@@ -16,8 +16,6 @@ export interface AuthRepository {
     profile: Profile;
   }>;
   me(data: MeData): Promise<{
-    token: string;
-    refresh_token: string;
     user: User;
     profile: Profile;
   }>;

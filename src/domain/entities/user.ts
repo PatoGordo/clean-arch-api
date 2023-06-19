@@ -4,6 +4,7 @@ import { Session } from "./session";
 
 export const DEFAULT_USER_STATUS = "pendinng_email_confirmation";
 export const DEFAULT_USER_ROLE = "user";
+export const DEFAULT_USER_EMAIL_CONFIRMED = false;
 
 export class User {
   // Fillable Fields
@@ -11,6 +12,7 @@ export class User {
   email: string;
   password: string;
   name: string;
+  confirmed_email?: boolean;
 
   // Management Fields
   status?: UserStatuEnum;
@@ -29,6 +31,7 @@ export class User {
     this.email = data.email;
     this.password = data.password;
     this.name = data.name;
+    this.confirmed_email = data.confirmed_email || DEFAULT_USER_EMAIL_CONFIRMED;
 
     // Management Fields
     this.status = data?.status || DEFAULT_USER_STATUS;
