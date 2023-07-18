@@ -349,7 +349,7 @@ export class InMemoryAuthRepository implements AuthRepository {
 
     const resetPasswordToken = jwt.sign(
       { user_id: user.id },
-      String(process.env.RESET_PASSWORD_JWT_SECRET),
+      "<testing_reset_password_token>",
     );
 
     mailer.send({
