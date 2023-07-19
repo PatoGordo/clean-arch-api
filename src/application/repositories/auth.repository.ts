@@ -19,13 +19,11 @@ export interface AuthRepository {
     user: User;
     profile: Profile;
   }>;
-  findSessions(data: FindSessionsData): Promise<{ sessions: Session[] }>;
   signOut(data: SignOutData): Promise<void>;
   forgotPassword(data: ForgotPasswordData): Promise<void>;
   resetPassword(data: ResetPasswordData): Promise<void>;
   confirmEmail(data: ConfirmEmailData): Promise<void>;
   resendEmailConfirmation(data: ResendEmailConfirmationData): Promise<void>;
-  endSession(data: EndSessionData): Promise<void>;
   changePassword(data: ChangePasswordData): Promise<void>;
 }
 
@@ -63,17 +61,6 @@ export interface ResendEmailConfirmationData {
 
 export interface ConfirmEmailData {
   confirm_email_token: string;
-}
-
-export interface FindSessionsData {
-  user_id: string;
-  password_confirmation: string;
-}
-
-export interface EndSessionData {
-  link: string;
-  password_confirmation: string;
-  current_token: string;
 }
 
 export interface ChangePasswordData {

@@ -2,8 +2,6 @@ import {
   AuthRepository,
   ChangePasswordData,
   ConfirmEmailData,
-  EndSessionData,
-  FindSessionsData,
   ForgotPasswordData,
   MeData,
   ResendEmailConfirmationData,
@@ -20,7 +18,6 @@ import { inMemoryDB } from "../db";
 import { Session } from "../../../../domain/entities/session";
 import moment from "moment";
 import { generateID } from "../../../../utils/generate-id";
-import { profile } from "console";
 import { InMemoryMailer } from "../../../mail/in-memory/adapters/in-memory-mail";
 
 export class InMemoryAuthRepository implements AuthRepository {
@@ -202,60 +199,6 @@ export class InMemoryAuthRepository implements AuthRepository {
     inMemoryDB.sessions.splice(sessionIndex, 1);
 
     return;
-  }
-
-  async endSession(data: EndSessionData): Promise<void> {
-    const session = inMemoryDB.sessions.find(
-      session => session.link === data.link,
-    );
-
-    const user = inMemoryDB.users.find(
-      user => user.id === session?.user_id,
-    ) as User;
-
-    if (data.current_token === session?.token) {
-      throw new Error("You cannot finish your current session!");
-    }
-
-    const isPasswordTheSame = bcrypt.compareSync(
-      data.password_confirmation,
-      user.password,
-    );
-
-    if (!isPasswordTheSame) {
-      throw new Error("Incorrect password! Check it and try again.");
-    }
-
-    const sessionIndex = inMemoryDB.sessions.findIndex(
-      _session => _session.id === session?.id,
-    );
-
-    inMemoryDB.sessions.splice(sessionIndex, 1);
-
-    return;
-  }
-
-  async findSessions(data: FindSessionsData): Promise<{ sessions: Session[] }> {
-    const user = inMemoryDB.users.find(
-      user => user.id === data.user_id,
-    ) as User;
-
-    const isPasswordTheSame = bcrypt.compareSync(
-      data.password_confirmation,
-      user.password,
-    );
-
-    if (!isPasswordTheSame) {
-      throw new Error("Incorrect password! Check it and try again.");
-    }
-
-    const sessions = inMemoryDB.sessions.filter(
-      session => session.user_id === user.id,
-    );
-
-    return {
-      sessions,
-    };
   }
 
   async confirmEmail(data: ConfirmEmailData): Promise<void> {
