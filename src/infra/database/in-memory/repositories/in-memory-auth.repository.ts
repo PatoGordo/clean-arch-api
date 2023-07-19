@@ -21,7 +21,7 @@ import { Session } from "../../../../domain/entities/session";
 import moment from "moment";
 import { generateID } from "../../../../utils/generate-id";
 import { profile } from "console";
-import { InMemoryMailer } from "../../../mail/in-memory/adapters/in-memory-mail.adpater";
+import { InMemoryMailer } from "../../../mail/in-memory/adapters/in-memory-mail";
 
 export class InMemoryAuthRepository implements AuthRepository {
   async signIn(data: SignInData): Promise<{
@@ -33,7 +33,7 @@ export class InMemoryAuthRepository implements AuthRepository {
     const userExists = inMemoryDB.users.find(user => user.email === data.email);
 
     if (!userExists) {
-      throw new Error("Email ou senha incorretos!");
+      throw new Error("Email or password went wrong!");
     }
 
     const isPasswordTheSame = bcrypt.compareSync(
@@ -42,7 +42,7 @@ export class InMemoryAuthRepository implements AuthRepository {
     );
 
     if (!isPasswordTheSame) {
-      throw new Error("Email ou senha incorretos!");
+      throw new Error("Email or password went wrong!");
     }
 
     const authToken = jwt.sign(
@@ -99,9 +99,7 @@ export class InMemoryAuthRepository implements AuthRepository {
     );
 
     if (emailAlreadyUsed) {
-      throw new Error(
-        "Esse email já está em uso! Use outro ou logo com a conta desejada.",
-      );
+      throw new Error("This email is already used in an account!");
     }
 
     const user = new User({
@@ -166,7 +164,7 @@ export class InMemoryAuthRepository implements AuthRepository {
     const userId = jwt.verify(data.token, String(process.env.JWT_SECRET));
 
     if (typeof userId === "string" || !userId) {
-      throw new Error("Token de autenticação inválido!");
+      throw new Error("Invalid authentication token!");
     }
 
     const session = inMemoryDB.sessions.find(
@@ -176,7 +174,7 @@ export class InMemoryAuthRepository implements AuthRepository {
     );
 
     if (!session) {
-      throw new Error("Esse token não está vinculado a nenhuma sessão aberta!");
+      throw new Error("This token doesn't belongs to any session!");
     }
 
     const user = inMemoryDB.users.find(
@@ -216,9 +214,7 @@ export class InMemoryAuthRepository implements AuthRepository {
     ) as User;
 
     if (data.current_token === session?.token) {
-      throw new Error(
-        "Você não pode encerrar sua sessão por essa tela, faça logout para isso!",
-      );
+      throw new Error("You cannot finish your current session!");
     }
 
     const isPasswordTheSame = bcrypt.compareSync(
@@ -227,7 +223,7 @@ export class InMemoryAuthRepository implements AuthRepository {
     );
 
     if (!isPasswordTheSame) {
-      throw new Error("Senha incorreta! Verifique-a e tente novamente.");
+      throw new Error("Incorrect password! Check it and try again.");
     }
 
     const sessionIndex = inMemoryDB.sessions.findIndex(
@@ -250,7 +246,7 @@ export class InMemoryAuthRepository implements AuthRepository {
     );
 
     if (!isPasswordTheSame) {
-      throw new Error("Senha incorreta! Verifique-a e tente novamente.");
+      throw new Error("Incorrect password! Check it and try again.");
     }
 
     const sessions = inMemoryDB.sessions.filter(
@@ -269,7 +265,7 @@ export class InMemoryAuthRepository implements AuthRepository {
     );
 
     if (typeof isValidEmailConfirmationToken === "string") {
-      throw new Error("Token de confirmação de email inválido ou expirado!");
+      throw new Error("Invalid email confirmation token!");
     }
 
     const user = inMemoryDB.users.find(
@@ -285,7 +281,7 @@ export class InMemoryAuthRepository implements AuthRepository {
     );
 
     if (!user) {
-      throw new Error("Usuário não existe na base!");
+      throw new Error("This user ins't registered in the app!");
     }
 
     inMemoryDB.users[userIndex].confirmed_email = true;
@@ -299,7 +295,9 @@ export class InMemoryAuthRepository implements AuthRepository {
     const user = inMemoryDB.users.find(user => user.email === data.email);
 
     if (!user || user.confirmed_email) {
-      throw new Error("Esse usuário não existe ou já teve o email confirmado!");
+      throw new Error(
+        "This user does't exists or already have the email confirmed!",
+      );
     }
 
     const mailer = new InMemoryMailer();
@@ -329,7 +327,7 @@ export class InMemoryAuthRepository implements AuthRepository {
     );
 
     if (!bcrypt.compareSync(data.old_password, user.password)) {
-      throw new Error("Senha incorreta! Verifique-a e tente novamente.");
+      throw new Error("Incorrect password! Check it and try again.");
     }
 
     inMemoryDB.users[userIndex].password = bcrypt.hashSync(
@@ -369,7 +367,7 @@ export class InMemoryAuthRepository implements AuthRepository {
     );
 
     if (typeof isValidResetPasswordToken === "string") {
-      throw new Error("Token de redefinição de senha inválido ou expirado!");
+      throw new Error("Password reset token is invalid or expired!");
     }
 
     const userIndex = inMemoryDB.users.findIndex(
