@@ -1,11 +1,8 @@
-import {
-  Controller,
-  ControllerResponse,
-} from "../../../../infra/http/adapters/controller-adapter";
+import { Controller } from "../../../adapters/http/controller";
 import { SignOutUseCase } from "./sign-out.usecase";
 
 export class SignOutControler extends Controller<SignOutUseCase> {
-  public execute(): Promise<ControllerResponse> {
+  public execute() {
     return this.handleResult({});
   }
 }

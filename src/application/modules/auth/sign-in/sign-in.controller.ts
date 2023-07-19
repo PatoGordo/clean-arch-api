@@ -1,11 +1,12 @@
-import {
-  Controller,
-  ControllerResponse,
-} from "../../../../infra/http/adapters/controller-adapter";
+import { Controller } from "../../../adapters/http/controller";
 import { SignInUseCase } from "./sign-in.usecase";
 
 export class SignInControler extends Controller<SignInUseCase> {
-  public execute(): Promise<ControllerResponse> {
-    return this.handleResult({});
+  public async execute() {
+    const body = await this.getBody();
+
+    return this.handleResult({
+      result: body,
+    });
   }
 }

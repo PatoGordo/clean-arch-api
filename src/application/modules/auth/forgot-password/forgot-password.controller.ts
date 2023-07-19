@@ -1,8 +1,8 @@
-import { Request, Response } from "express";
+import { Controller } from "../../../adapters/http/controller";
 import { ForgotPasswordUseCase } from "./forgot-password.usecase";
 
-export class ChangePasswordController {
-  constructor(private useCase: ForgotPasswordUseCase) {}
-
-  async execute(req: Request, res: Response) {}
+export class ForgorPasswordController extends Controller<ForgotPasswordUseCase> {
+  public execute() {
+    return this.handleResult({});
+  }
 }

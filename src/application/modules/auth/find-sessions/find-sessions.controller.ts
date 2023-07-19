@@ -1,11 +1,8 @@
-import {
-  Controller,
-  ControllerResponse,
-} from "../../../../infra/http/adapters/controller-adapter";
+import { Controller } from "../../../adapters/http/controller";
 import { FindSessionsUseCase } from "./find-sessions.usecase";
 
 export class FindSessionsControler extends Controller<FindSessionsUseCase> {
-  public execute(): Promise<ControllerResponse> {
+  public execute() {
     return this.handleResult({});
   }
 }

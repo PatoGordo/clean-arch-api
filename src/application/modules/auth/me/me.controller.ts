@@ -1,11 +1,8 @@
-import {
-  Controller,
-  ControllerResponse,
-} from "../../../../infra/http/adapters/controller-adapter";
+import { Controller } from "../../../adapters/http/controller";
 import { MeUseCase } from "./me.usecase";
 
 export class MeControler extends Controller<MeUseCase> {
-  public execute(): Promise<ControllerResponse> {
+  public execute() {
     return this.handleResult({});
   }
 }

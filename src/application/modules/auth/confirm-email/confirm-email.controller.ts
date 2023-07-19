@@ -1,11 +1,8 @@
-import {
-  Controller,
-  ControllerResponse,
-} from "../../../../infra/http/adapters/controller-adapter";
+import { Controller } from "../../../adapters/http/controller";
 import { ConfirmEmailUseCase } from "./confirm-email.usecase";
 
 export class ConfirmEmailControler extends Controller<ConfirmEmailUseCase> {
-  public execute(): Promise<ControllerResponse> {
+  public execute() {
     return this.handleResult({});
   }
 }
