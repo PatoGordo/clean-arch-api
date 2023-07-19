@@ -2,6 +2,7 @@ import {
   AuthRepository,
   ChangePasswordData,
   ConfirmEmailData,
+  FindUserByIdData,
   ForgotPasswordData,
   MeData,
   ResendEmailConfirmationData,
@@ -322,5 +323,11 @@ export class InMemoryAuthRepository implements AuthRepository {
       data.new_password,
       11,
     );
+  }
+
+  async findUserById(data: FindUserByIdData): Promise<User | undefined> {
+    const user = inMemoryDB.users.find(user => user.id === data.user_id);
+
+    return user;
   }
 }

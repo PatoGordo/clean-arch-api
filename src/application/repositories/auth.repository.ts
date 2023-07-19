@@ -25,6 +25,7 @@ export interface AuthRepository {
   confirmEmail(data: ConfirmEmailData): Promise<void>;
   resendEmailConfirmation(data: ResendEmailConfirmationData): Promise<void>;
   changePassword(data: ChangePasswordData): Promise<void>;
+  findUserById(data: FindUserByIdData): Promise<User | undefined>;
 }
 
 export interface SignInData {
@@ -67,4 +68,8 @@ export interface ChangePasswordData {
   user_id: string;
   old_password: string;
   new_password: string;
+}
+
+export interface FindUserByIdData {
+  user_id: string;
 }
