@@ -1,4 +1,4 @@
-import { MailMessage } from "../../../application/adapters/mail";
+import { MailMessage } from "../../../application/adapters/mail/transporter";
 
 export const inMemoryMail: {
   [address in string]: {

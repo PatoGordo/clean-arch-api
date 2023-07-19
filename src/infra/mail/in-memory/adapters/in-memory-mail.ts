@@ -1,10 +1,10 @@
 import {
-  MailAdapter,
+  MailTransporterAdapter,
   MailMessage,
-} from "../../../../application/adapters/mail";
+} from "../../../../application/adapters/mail/transporter";
 import { inMemoryMail } from "../mail";
 
-export class InMemoryMailer implements MailAdapter {
+export class InMemoryMailer implements MailTransporterAdapter {
   async send(message: MailMessage): Promise<void> {
     if (!inMemoryMail[message.to]?.inbox) {
       inMemoryMail[message.to] = {

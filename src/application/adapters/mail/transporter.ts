@@ -1,4 +1,4 @@
-export interface MailAdapter {
+export interface MailTransporterAdapter {
   send(message: MailMessage): Promise<void>;
   inbox(email: string): Promise<MailMessage[]>;
   outbox(email: string): Promise<MailMessage[]>;
