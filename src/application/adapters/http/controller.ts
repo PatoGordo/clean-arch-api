@@ -1,5 +1,5 @@
 import { HTTPResponse } from "../../../domain/http/http-response";
-import { ExpressController } from "../../../infra/http/adapters/controller-adapter";
+import { ExpressController } from "../../../infra/http/adapters/express-controller";
 
 export type IController<T> = {
   handleResult(data: Partial<HTTPResponse>): Promise<any>;
