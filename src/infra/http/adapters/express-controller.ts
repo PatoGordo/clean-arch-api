@@ -10,6 +10,7 @@ import { ZodError, z } from "zod";
 import { IController } from "../../../application/adapters/http/controller";
 
 export abstract class ExpressController<T> implements IController<T> {
+  public context?: any;
   private req: Request | null = null;
   private res: Response | null = null;
   private next: NextFunction | null = null;
@@ -21,13 +22,21 @@ export abstract class ExpressController<T> implements IController<T> {
     this.next = null;
   }
 
-  public abstract execute(): Promise<ControllerResponse>;
+  public abstract execute(): Promise<ControllerResponse | void>;
+
+  public nextFunction(): void {
+    if (!this.next) {
+      throw new Error("Next function does not exists");
+    }
+
+    this?.next();
+  }
 
   public handler = async (
     req: Request,
     res: Response,
     next: NextFunction,
-  ): Promise<ControllerResponse> => {
+  ): Promise<ControllerResponse | void> => {
     this.req = req;
     this.res = res;
     this.next = next;
@@ -44,7 +53,7 @@ export abstract class ExpressController<T> implements IController<T> {
   public handleResult = async (
     data: Partial<HTTPResponse>,
   ): Promise<Response<Partial<HTTPResponse> & unknown>> => {
-    const response = this.res?.status(data?.statusCode || 200);
+    const response = this.res?.status(data?.status_code || 200);
 
     if (response) {
       return response.json({ ...data });
@@ -58,16 +67,17 @@ export abstract class ExpressController<T> implements IController<T> {
 
     console.error(err);
 
-    const statusCode = err.statusCode || 400;
+    const statusCode = err.status_code || 400;
 
     if (error instanceof z.ZodError) {
       const errors = this.formatZodErrors(error.flatten().fieldErrors);
 
       return this.handleResult({
-        statusCode,
+        status_code: statusCode,
         message: errors[0],
         cause: err.cause,
-        code: err.code,
+        path: this.req?.path,
+        timestamp: new Date().toISOString(),
       });
     }
 
@@ -88,19 +98,20 @@ export abstract class ExpressController<T> implements IController<T> {
         .filter(i => i)[0];
 
       return this.handleResult({
-        statusCode,
         message: errorText,
         cause: err.cause,
-        code: err.code,
+        status_code: statusCode,
+        path: this.req?.path,
+        timestamp: new Date().toISOString(),
       });
     }
 
     return this.handleResult({
-      statusCode,
+      status_code: statusCode,
       message: err.message,
-      stack: err.stack,
       cause: err.cause,
-      code: err.code,
+      path: this.req?.path,
+      timestamp: new Date().toISOString(),
     });
   };
 
@@ -141,7 +152,7 @@ export abstract class ExpressController<T> implements IController<T> {
   };
 
   public getHeader = async (name: string) => {
-    return this.res?.getHeader(name);
+    return this.req?.headers[name];
   };
 
   public setHeader = async (name: string, value: string | string[]) => {
@@ -151,6 +162,10 @@ export abstract class ExpressController<T> implements IController<T> {
   public sendResponse = async (body: any) => {
     return this.res?.send(body);
   };
+
+  public setStatusCode(code: number): void {
+    (this.res as Response).statusCode = code;
+  }
 
   public renderView = async (
     view: string,
@@ -199,6 +214,22 @@ export abstract class ExpressController<T> implements IController<T> {
   public download = async (path: string, fn?: Errback | undefined) => {
     this.res?.download(path, fn);
   };
+
+  public getContext(name?: string): void {
+    if (!name) {
+      return (this.req as any).context;
+    }
+
+    return (this.req as any).context[name];
+  }
+
+  public setContext(name: string, value: any): void {
+    (this.req as any)["context"] = {
+      ...{
+        [name]: value,
+      },
+    };
+  }
 }
 
 export type ControllerResponse =
