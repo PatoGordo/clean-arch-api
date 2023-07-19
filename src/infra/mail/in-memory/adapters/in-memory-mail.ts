@@ -1,7 +1,7 @@
 import {
   MailAdapter,
   MailMessage,
-} from "../../../../application/adapters/mail.adapter";
+} from "../../../../application/adapters/mail";
 import { inMemoryMail } from "../mail";
 
 export class InMemoryMailer implements MailAdapter {
