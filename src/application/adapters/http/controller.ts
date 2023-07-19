@@ -2,6 +2,7 @@ import { HTTPResponse } from "../../../domain/http/http-response";
 import { ExpressController } from "../../../infra/http/adapters/express-controller";
 
 export type IController<T> = {
+  context?: any;
   handleResult(data: Partial<HTTPResponse>): Promise<any>;
   handleError(error: Error | unknown, status?: number): Promise<any>;
   formatZodErrors(errors: any): string;
@@ -22,9 +23,13 @@ export type IController<T> = {
   getContentType(): Promise<any>;
   getCookie(name: string, value: string, options: any): Promise<any>;
   setCookie(name: string, value: string, options: any): Promise<void>;
+  setStatusCode(code: number): void;
   clearCookie(name: string, options: any): Promise<void>;
   redirect(url: string, status: number): Promise<void>;
   download(path: string, fn: any): Promise<void>;
+  nextFunction(): void;
+  setContext(name: string, value: any): void;
+  getContext(name?: string): void;
 };
 
 /*
