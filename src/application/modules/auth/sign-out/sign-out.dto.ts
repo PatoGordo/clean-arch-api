@@ -1,1 +1,3 @@
-export interface SignOutDTO {}
+export interface SignOutDTO {
+  token: string;
+}

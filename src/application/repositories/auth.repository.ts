@@ -6,6 +6,7 @@ export interface AuthRepository {
   findUserByEmail(data: FindUserByEmailData): Promise<User | undefined>;
   findUserById(data: FindUserByIdData): Promise<User | undefined>;
   createSession(data: CreateSessionData): Promise<Session>;
+  deleteSession(data: DeleteSessionData): Promise<void>;
   createUser(data: CreateUserData): Promise<User>;
 }
 
@@ -13,6 +14,10 @@ export interface CreateSessionData {
   expires_at: Date;
   token: string;
   user: User;
+}
+
+export interface DeleteSessionData {
+  token: string;
 }
 
 export interface FindUserByEmailData {

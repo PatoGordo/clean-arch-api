@@ -2,6 +2,7 @@ import {
   AuthRepository,
   CreateSessionData,
   CreateUserData,
+  DeleteSessionData,
   FindUserByEmailData,
   FindUserByIdData,
 } from "../../../../application/repositories/auth.repository";
@@ -58,5 +59,11 @@ export class InMemoryAuthRepository implements AuthRepository {
     inMemoryDB.sessions.push(session);
 
     return session;
+  }
+
+  async deleteSession(data: DeleteSessionData): Promise<void> {
+    const index = inMemoryDB.sessions.findIndex(s => s.token === data.token);
+
+    inMemoryDB.sessions.splice(index, 1);
   }
 }
