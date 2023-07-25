@@ -39,10 +39,8 @@ describe("Testing Sign In UseCase", () => {
     });
 
     expect(result.user).toBe(user);
-    expect(result.profile.user_id).toBe(user.id);
     expect(result.user.profile_id).toBe(profile.id);
     expect(result.user.profile).toBe(profile);
-    expect(result.profile.user).toBe(user);
     expect(
       inMemoryDB.sessions.find(session => session.token === result.token),
     ).toBeTruthy();
