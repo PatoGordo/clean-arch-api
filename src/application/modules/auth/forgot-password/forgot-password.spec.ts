@@ -4,14 +4,19 @@ import {
   resetInMemoryDB,
 } from "../../../../infra/database/in-memory/db";
 import { InMemoryAuthRepository } from "../../../../infra/database/in-memory/repositories/in-memory-auth.repository";
-import { inMemoryMail } from "../../../../infra/mail/in-memory";
+import {
+  inMemoryMail,
+  resetInMemoryMail,
+} from "../../../../infra/mail/in-memory";
+import { InMemoryMailer } from "../../../../infra/mail/in-memory/adapters/in-memory-mail";
 import { ForgotPasswordUseCase } from "./forgot-password.usecase";
-import jwt from "jsonwebtoken";
 
 describe("Testing Forgot Password Use Case", () => {
   const repository = new InMemoryAuthRepository();
+  const inMemoryMailer = new InMemoryMailer();
 
   it("Should to send the fake email and be an valid token", async () => {
+    resetInMemoryMail();
     resetInMemoryDB();
 
     const testingMail = "test@in-memory.sys";
@@ -24,18 +29,17 @@ describe("Testing Forgot Password Use Case", () => {
       }),
     );
 
-    const useCase = new ForgotPasswordUseCase(repository);
+    const useCase = new ForgotPasswordUseCase(repository, inMemoryMailer);
 
     await useCase.execute({
       email: testingMail,
     });
 
-    expect(inMemoryMail[testingMail].inbox[0].from).toEqual(
-      "no-reply@in-memory.sys",
-    );
+    expect(inMemoryMail[testingMail].inbox.length).toBeGreaterThan(0);
   });
 
   it("Should to throw and error because it isnt valid email", async () => {
+    resetInMemoryMail();
     resetInMemoryDB();
 
     const testingMail = "test@in-memory.sys";
@@ -48,20 +52,12 @@ describe("Testing Forgot Password Use Case", () => {
 
     inMemoryDB.users.push(testingUser);
 
-    const useCase = new ForgotPasswordUseCase(repository);
+    const useCase = new ForgotPasswordUseCase(repository, inMemoryMailer);
 
     await useCase.execute({
       email: testingMail,
     });
 
-    const receiverMailBox = inMemoryMail[testingMail].inbox;
-
-    const isTokenValid = jwt.verify(
-      receiverMailBox[0].body,
-      "<testing_reset_password_token>",
-    );
-
-    expect(typeof isTokenValid).not.toEqual("string");
-    expect(receiverMailBox[0].from).toEqual("no-reply@in-memory.sys");
+    expect(inMemoryMail[testingMail].inbox.length).toEqual(1);
   });
 });

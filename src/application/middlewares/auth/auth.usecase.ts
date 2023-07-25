@@ -1,8 +1,8 @@
-import { AuthRepository } from "../../../../application/repositories/auth.repository";
-import { User } from "../../../../domain/entities/user";
+import { AuthRepository } from "../../../application/repositories/auth.repository";
+import { User } from "../../../domain/entities/user";
 
 import jwt from "jsonwebtoken";
-import { HTTPException } from "../../../../domain/http/http-exception";
+import { HTTPException } from "../../../domain/http/http-exception";
 
 export class AuthMiddlwareUseCase {
   constructor(private repository: AuthRepository) {}

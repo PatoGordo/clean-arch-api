@@ -1,5 +1,4 @@
-import { Module } from "../../../../application/adapters/http/module";
-import { AuthRepository } from "../../../../application/repositories/auth.repository";
+import { Module } from "../../../application/adapters/http/module";
 import { AuthMiddlewareController } from "./auth.controller";
 import { AuthMiddlwareUseCase } from "./auth.usecase";
 

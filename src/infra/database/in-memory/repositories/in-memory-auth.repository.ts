@@ -1,15 +1,17 @@
 import {
   AuthRepository,
+  CreatePasswordChangeData,
   CreateSessionData,
   CreateUserData,
   DeleteSessionData,
   FindUserByEmailData,
   FindUserByIdData,
 } from "../../../../application/repositories/auth.repository";
+import { PasswordChange } from "../../../../domain/entities/password-change";
 import { Profile } from "../../../../domain/entities/profile";
 import { Session } from "../../../../domain/entities/session";
 import { User } from "../../../../domain/entities/user";
-import { generateID } from "../../../../utils/generate-id";
+
 import { inMemoryDB } from "../db";
 
 export class InMemoryAuthRepository implements AuthRepository {
@@ -52,7 +54,7 @@ export class InMemoryAuthRepository implements AuthRepository {
       user: data.user,
       user_id: data.user.id,
       last_access: new Date(),
-      link: generateID(64),
+      link: data.link,
       token: data.token,
     });
 
@@ -65,5 +67,23 @@ export class InMemoryAuthRepository implements AuthRepository {
     const index = inMemoryDB.sessions.findIndex(s => s.token === data.token);
 
     inMemoryDB.sessions.splice(index, 1);
+  }
+
+  async createPasswordChange(
+    data: CreatePasswordChangeData,
+  ): Promise<PasswordChange | undefined> {
+    const passwordChange = new PasswordChange({
+      expires_at: data.expires_at,
+      is_reset_password: data.is_reset_password,
+      token: data.token,
+      old_password: data.user.password,
+      status: "not_executed",
+      user: data.user,
+      user_id: data.user.id,
+    });
+
+    inMemoryDB.password_changes.push(passwordChange);
+
+    return passwordChange;
   }
 }

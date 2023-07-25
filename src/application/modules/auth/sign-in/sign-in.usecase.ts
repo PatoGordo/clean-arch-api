@@ -4,6 +4,7 @@ import { AuthRepository } from "../../../repositories/auth.repository";
 import { SignInDTO } from "./sign-in.dto";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { generateID } from "../../../../utils/generate-id";
 
 export class SignInUseCase {
   constructor(private authRepository: AuthRepository) {}
@@ -36,10 +37,13 @@ export class SignInUseCase {
       },
     );
 
+    const link = generateID(64);
+
     const session = await this.authRepository.createSession({
       expires_at: moment().add(1, "h").toDate(),
       token: authToken,
       user: userExists,
+      link,
     });
 
     const refreshToken = jwt.sign(

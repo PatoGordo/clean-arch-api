@@ -1,5 +1,5 @@
-import { Controller } from "../../../../application/adapters/http/controller";
-import { HTTPException } from "../../../../domain/http/http-exception";
+import { Controller } from "../../../application/adapters/http/controller";
+import { HTTPException } from "../../../domain/http/http-exception";
 import { AuthMiddlwareUseCase } from "./auth.usecase";
 
 export class AuthMiddlewareController extends Controller<AuthMiddlwareUseCase> {
