@@ -3,7 +3,7 @@ import { AuthRepository } from "../../../../application/repositories/auth.reposi
 import { AuthMiddlewareController } from "./auth.controller";
 import { AuthMiddlwareUseCase } from "./auth.usecase";
 
-export class AuthMiddlewareModule extends Module<AuthRepository> {
+export class AuthMiddlewareModule extends Module {
   useCase = AuthMiddlwareUseCase;
   controller = AuthMiddlewareController;
 }

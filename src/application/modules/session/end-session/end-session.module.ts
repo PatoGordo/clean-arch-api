@@ -3,7 +3,7 @@ import { SessionRepository } from "../../../repositories/session.repository";
 import { EndSessionController } from "./end-session.controller";
 import { EndSessionUseCase } from "./end-session.usecase";
 
-export class EndSessionModule extends Module<SessionRepository> {
+export class EndSessionModule extends Module {
   useCase = EndSessionUseCase;
   controller = EndSessionController;
 }

@@ -1,13 +1,15 @@
 import moment from "moment";
-import { UseCase } from "../../../adapters/http/usecase";
+
 import { AuthRepository } from "../../../repositories/auth.repository";
 import { SignInDTO } from "./sign-in.dto";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-export class SignInUseCase extends UseCase<AuthRepository> {
+export class SignInUseCase {
+  constructor(private authRepository: AuthRepository) {}
+
   async execute(data: SignInDTO) {
-    const userExists = await this.repository.findUserByEmail({
+    const userExists = await this.authRepository.findUserByEmail({
       email: data.email,
     });
 
@@ -34,7 +36,7 @@ export class SignInUseCase extends UseCase<AuthRepository> {
       },
     );
 
-    const session = await this.repository.createSession({
+    const session = await this.authRepository.createSession({
       expires_at: moment().add(1, "h").toDate(),
       token: authToken,
       user: userExists,

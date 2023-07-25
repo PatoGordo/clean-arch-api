@@ -1,11 +1,13 @@
 import moment from "moment";
-import { UseCase } from "../../../adapters/http/usecase";
+
 import { AuthRepository } from "../../../repositories/auth.repository";
 import { SignUpDTO } from "./sign-up.dto";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
-export class SignUpUseCase extends UseCase<AuthRepository> {
+export class SignUpUseCase {
+  constructor(private repository: AuthRepository) {}
+
   async execute(data: SignUpDTO) {
     const emailAlreadyUsed = await this.repository.findUserByEmail({
       email: data.email,

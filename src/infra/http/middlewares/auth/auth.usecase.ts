@@ -1,11 +1,12 @@
-import { UseCase } from "../../../../application/adapters/http/usecase";
 import { AuthRepository } from "../../../../application/repositories/auth.repository";
 import { User } from "../../../../domain/entities/user";
 
 import jwt from "jsonwebtoken";
 import { HTTPException } from "../../../../domain/http/http-exception";
 
-export class AuthMiddlwareUseCase extends UseCase<AuthRepository> {
+export class AuthMiddlwareUseCase {
+  constructor(private repository: AuthRepository) {}
+
   async execute(token: string): Promise<{ user: User }> {
     const tokenData = jwt.verify(
       token,
