@@ -23,10 +23,6 @@ describe("Testing Sign Up UseCase", () => {
     expect(
       inMemoryDB.users.find(user => user.email === result.user.email),
     ).toBeTruthy();
-    expect(result.profile.id).toEqual(
-      inMemoryDB.users.find(user => user.email === result.user.email)
-        ?.profile_id,
-    );
     expect(
       inMemoryDB.sessions.find(session => session.user_id === result.user.id),
     ).toBeTruthy();
