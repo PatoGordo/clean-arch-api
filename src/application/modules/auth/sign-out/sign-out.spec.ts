@@ -1,5 +1,8 @@
 import { Session } from "../../../../domain/entities/session";
-import { inMemoryDB, resetInMemoryDB } from "../../../../infra/database/in-memory/db";
+import {
+  inMemoryDB,
+  resetInMemoryDB,
+} from "../../../../infra/database/in-memory/db";
 import { InMemoryAuthRepository } from "../../../../infra/database/in-memory/repositories/in-memory-auth.repository";
 import { SignOutUseCase } from "./sign-out.usecase";
 
